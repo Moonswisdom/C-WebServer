@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "D:\\Work\\ClientServer\\ClientServer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6680B73F-9557-4B95-BFC5-F88506B5DA2D}|Server\\Server.vcxproj|D:\\Work\\ClientServer\\ClientServer\\Server\\Server.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{6680B73F-9557-4B95-BFC5-F88506B5DA2D}|Server\\Server.vcxproj|solutionrelative:Server\\Server.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{25E96A2A-EB7E-4BB6-8559-82676C416B32}|Client\\Client.vcxproj|D:\\Work\\ClientServer\\ClientServer\\Client\\Clientmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{25E96A2A-EB7E-4BB6-8559-82676C416B32}|Client\\Client.vcxproj|solutionrelative:Client\\Clientmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{25E96A2A-EB7E-4BB6-8559-82676C416B32}|Client\\Client.vcxproj|D:\\Work\\ClientServer\\ClientServer\\Client\\clientmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{25E96A2A-EB7E-4BB6-8559-82676C416B32}|Client\\Client.vcxproj|solutionrelative:Client\\clientmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{25E96A2A-EB7E-4BB6-8559-82676C416B32}|Client\\Client.vcxproj|D:\\Work\\ClientServer\\ClientServer\\Client\\Client.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{25E96A2A-EB7E-4BB6-8559-82676C416B32}|Client\\Client.vcxproj|solutionrelative:Client\\Client.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6680B73F-9557-4B95-BFC5-F88506B5DA2D}|Server\\Server.vcxproj|D:\\Work\\ClientServer\\ClientServer\\Server\\Servermain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{6680B73F-9557-4B95-BFC5-F88506B5DA2D}|Server\\Server.vcxproj|solutionrelative:Server\\Servermain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{25E96A2A-EB7E-4BB6-8559-82676C416B32}|Client\\Client.vcxproj|D:\\Work\\ClientServer\\ClientServer\\Client\\Client.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{25E96A2A-EB7E-4BB6-8559-82676C416B32}|Client\\Client.vcxproj|solutionrelative:Client\\Client.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{6680B73F-9557-4B95-BFC5-F88506B5DA2D}|Server\\Server.vcxproj|D:\\Work\\ClientServer\\ClientServer\\Server\\Server.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{6680B73F-9557-4B95-BFC5-F88506B5DA2D}|Server\\Server.vcxproj|solutionrelative:Server\\Server.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{25E96A2A-EB7E-4BB6-8559-82676C416B32}|Client\\Client.vcxproj|D:\\Work\\ClientServer\\ClientServer\\Client\\Client.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -25,6 +25,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{6680B73F-9557-4B95-BFC5-F88506B5DA2D}|Server\\Server.vcxproj|D:\\Work\\ClientServer\\ClientServer\\Server\\Server.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{6680B73F-9557-4B95-BFC5-F88506B5DA2D}|Server\\Server.vcxproj|solutionrelative:Server\\Server.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25E96A2A-EB7E-4BB6-8559-82676C416B32}|Client\\Client.vcxproj|D:\\Work\\ClientServer\\ClientServer\\Client\\MsgHead.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{25E96A2A-EB7E-4BB6-8559-82676C416B32}|Client\\Client.vcxproj|solutionrelative:Client\\MsgHead.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6680B73F-9557-4B95-BFC5-F88506B5DA2D}|Server\\Server.vcxproj|D:\\Work\\ClientServer\\ClientServer\\Server\\MsgHead.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{6680B73F-9557-4B95-BFC5-F88506B5DA2D}|Server\\Server.vcxproj|solutionrelative:Server\\MsgHead.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,24 +42,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Clientmain.cpp",
-              "DocumentMoniker": "D:\\Work\\ClientServer\\ClientServer\\Client\\Clientmain.cpp",
-              "RelativeDocumentMoniker": "Client\\Clientmain.cpp",
-              "ToolTip": "D:\\Work\\ClientServer\\ClientServer\\Client\\Clientmain.cpp",
-              "RelativeToolTip": "Client\\Clientmain.cpp",
-              "ViewState": "AQIAAB4AAAAAAAAAAAAAADEAAAAQAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-14T10:27:42.71Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -61,23 +56,9 @@
               "RelativeDocumentMoniker": "Client\\Client.h",
               "ToolTip": "D:\\Work\\ClientServer\\ClientServer\\Client\\Client.h",
               "RelativeToolTip": "Client\\Client.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAACAAAAAPAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-07-14T09:09:09.325Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Client.cpp",
-              "DocumentMoniker": "D:\\Work\\ClientServer\\ClientServer\\Client\\Client.cpp",
-              "RelativeDocumentMoniker": "Client\\Client.cpp",
-              "ToolTip": "D:\\Work\\ClientServer\\ClientServer\\Client\\Client.cpp",
-              "RelativeToolTip": "Client\\Client.cpp",
-              "ViewState": "AQIAAGkAAAAAAAAAAAAgwI0AAAAQAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-14T09:08:05.437Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-15T10:31:23.559Z"
             },
             {
               "$type": "Document",
@@ -87,23 +68,70 @@
               "RelativeDocumentMoniker": "Server\\Servermain.cpp",
               "ToolTip": "D:\\Work\\ClientServer\\ClientServer\\Server\\Servermain.cpp",
               "RelativeToolTip": "Server\\Servermain.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAACAAAA",
+              "ViewState": "AQIAAAQAAAAAAAAAAAAowAYAAAACAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-14T09:02:24.202Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-15T08:24:44.436Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "MsgHead.h",
+              "DocumentMoniker": "D:\\Work\\ClientServer\\ClientServer\\Server\\MsgHead.h",
+              "RelativeDocumentMoniker": "Server\\MsgHead.h",
+              "ToolTip": "D:\\Work\\ClientServer\\ClientServer\\Server\\MsgHead.h",
+              "RelativeToolTip": "Server\\MsgHead.h",
+              "ViewState": "AQIAAC8AAAAAAAAAAAAowFAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-07-15T07:55:48.888Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MsgHead.h",
+              "DocumentMoniker": "D:\\Work\\ClientServer\\ClientServer\\Client\\MsgHead.h",
+              "RelativeDocumentMoniker": "Client\\MsgHead.h",
+              "ToolTip": "D:\\Work\\ClientServer\\ClientServer\\Client\\MsgHead.h",
+              "RelativeToolTip": "Client\\MsgHead.h",
+              "ViewState": "AQIAAC8AAAAAAAAAAAAowDUAAAACAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-07-15T07:54:46.026Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Client.cpp",
+              "DocumentMoniker": "D:\\Work\\ClientServer\\ClientServer\\Client\\Client.cpp",
+              "RelativeDocumentMoniker": "Client\\Client.cpp",
+              "ToolTip": "D:\\Work\\ClientServer\\ClientServer\\Client\\Client.cpp",
+              "RelativeToolTip": "Client\\Client.cpp",
+              "ViewState": "AQIAAJgAAAAAAAAAAAAowLkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-07-14T09:08:05.437Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Clientmain.cpp",
+              "DocumentMoniker": "D:\\Work\\ClientServer\\ClientServer\\Client\\Clientmain.cpp",
+              "RelativeDocumentMoniker": "Client\\Clientmain.cpp",
+              "ToolTip": "D:\\Work\\ClientServer\\ClientServer\\Client\\Clientmain.cpp",
+              "RelativeToolTip": "Client\\Clientmain.cpp",
+              "ViewState": "AQIAABwAAAAAAAAAAAAowDgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-07-14T10:27:42.71Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "Server.cpp",
               "DocumentMoniker": "D:\\Work\\ClientServer\\ClientServer\\Server\\Server.cpp",
               "RelativeDocumentMoniker": "Server\\Server.cpp",
               "ToolTip": "D:\\Work\\ClientServer\\ClientServer\\Server\\Server.cpp",
               "RelativeToolTip": "Server\\Server.cpp",
-              "ViewState": "AQIAANEAAAAAAAAAAAAcwNoAAAADAAAA",
+              "ViewState": "AQIAACABAAAAAAAAAAAowEEBAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-14T08:21:16.297Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-14T08:21:16.297Z"
             },
             {
               "$type": "Document",
@@ -113,10 +141,9 @@
               "RelativeDocumentMoniker": "Server\\Server.h",
               "ToolTip": "D:\\Work\\ClientServer\\ClientServer\\Server\\Server.h",
               "RelativeToolTip": "Server\\Server.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABoAAAAkAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-07-14T08:20:24.715Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-14T08:20:24.715Z"
             }
           ]
         }

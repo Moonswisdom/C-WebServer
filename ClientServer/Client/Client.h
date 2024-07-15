@@ -14,7 +14,7 @@ public:
 	~TcpClient();
 
 	// 创建socket
-	void InitSocket();
+	int InitSocket();
 	// 连接服务器
 	int Connect(const char* ip, unsigned short port);
 	// 发送消息
@@ -26,9 +26,15 @@ public:
 	// 关闭连接
 	void Close();
 	// 判断客户端是否运行
-	bool isRun();
+	bool isRun() const;
 	// 客户端运行主程序
 	bool MainRun();
+	
 private:
+	// 客户端socket
 	SOCKET _cSock;
+	// 消息缓冲区：用于组合和拆分接收到的消息
+	char _MsgBuf[RECV_BUFF_SIZE * 10];
+	// 消息缓冲区尾部索引
+	int _lastPos;
 };

@@ -1,5 +1,31 @@
 #include "Server.h"
 
+ClientSock::ClientSock(SOCKET sock):_cSock(sock)
+{
+	memset(_MsgBuf, 0, RECV_BUFF_SIZE * 10);
+	_lastPos = 0;
+}
+
+SOCKET ClientSock::getSocket() const
+{
+	return _cSock;
+}
+
+char* ClientSock::getMsgBuf()
+{
+	return _MsgBuf;
+}
+
+int ClientSock::getlastPos() const
+{
+	return _lastPos;
+}
+
+void ClientSock::setlastPos(int pos)
+{
+	_lastPos = pos;
+}
+
 TcpServer::TcpServer()
 {
 	_sSock = INVALID_SOCKET;
@@ -11,20 +37,26 @@ TcpServer::~TcpServer()
 	Close();
 }
 
+// 创建socket
 int TcpServer::InitSocket()
 {
 	// windows平台打开socket环境
 #ifdef _WIN32
 	// 使用socket 2.x版本
 	WORD wr = MAKEWORD(2, 2);
-	WSADATA dat;
-	WSAStartup(wr, &dat);
+	WSADATA dat = {};
+	int err = WSAStartup(wr, &dat);
+	if (err != 0)
+	{
+		std::cout << "window start up socket environment failed, error num is " << err << std::endl;
+		return -1;
+	}
 #endif
 	// 判断是否有旧连接
 	if (_sSock != INVALID_SOCKET)
 	{
+		Close();
 		std::cout << "off old connect ..." << std::endl;
-		_sSock = INVALID_SOCKET;
 	}
 	// 创建Socket
 	_sSock = socket(AF_INET, SOCK_STREAM, 0);
@@ -37,6 +69,7 @@ int TcpServer::InitSocket()
 	return 0;
 }
 
+// 绑定端口
 int TcpServer::Bind(const char* ip, unsigned short port)
 {
 	if (_sSock == INVALID_SOCKET)
@@ -44,7 +77,7 @@ int TcpServer::Bind(const char* ip, unsigned short port)
 		std::cout << "Invalid socket can not bind ..." << std::endl;
 		return -1;
 	}
-	sockaddr_in saddr;
+	sockaddr_in saddr = {};
 	saddr.sin_family = AF_INET;
 	saddr.sin_port = htons(port);
 	if (ip) 
@@ -69,6 +102,7 @@ int TcpServer::Bind(const char* ip, unsigned short port)
 	return 0;
 }
 
+// 监听端口
 int TcpServer::Listen(int num)
 {
 	if (_sSock == INVALID_SOCKET)
@@ -86,6 +120,7 @@ int TcpServer::Listen(int num)
 	return 0;
 }
 
+// 接受客户端连接
 int TcpServer::Accept()
 {
 	if (_sSock == INVALID_SOCKET)
@@ -93,8 +128,12 @@ int TcpServer::Accept()
 		std::cout << "Invalid socket can not accept ..." << std::endl;
 		return -1;
 	}
-	sockaddr_in caddr;
+	sockaddr_in caddr = {};
+#ifdef _WIN32
 	int clen = sizeof(caddr);
+#else
+	socklen_t clen = sizeof(caddr);
+#endif
 	SOCKET cSock = INVALID_SOCKET;
 	cSock = accept(_sSock, (struct sockaddr*)&caddr, &clen);
 	if (cSock == INVALID_SOCKET)
@@ -107,10 +146,11 @@ int TcpServer::Accept()
 	std::cout << "New client <socket=" << cSock << "> connect, ip: " << ip << std::endl;
 	NewUser newuser(cSock);
 	SendToAll(&newuser);
-	_sClients.emplace_back(cSock);
-	return cSock;
+	_sClients.emplace_back(new ClientSock(cSock));
+	return 0;
 }
 
+// 发送消息
 int TcpServer::SendData(SOCKET cSock, DataHeader* header)
 {
 	if (isRun() && header)
@@ -121,34 +161,57 @@ int TcpServer::SendData(SOCKET cSock, DataHeader* header)
 	return -1;
 }
 
+// 群发消息
 void TcpServer::SendToAll(DataHeader* header)
 {
 	if (isRun() && header) {
-		for (SOCKET client : _sClients)
+		for (auto& client : _sClients)
 		{
-			SendData(client, header);
+			SendData(client->getSocket(), header);
 		}
 	}
 }
 
-int TcpServer::RecvData(SOCKET cSock)
+// 接收消息
+// 接收缓冲区 -> 消息缓冲区， 组合和拆分数据来解决粘包和少包问题
+char recvBuf[RECV_BUFF_SIZE] = {};
+int TcpServer::RecvData(ClientSock* Client)
 {
-	// 缓冲区
-	char szRecv[4096];
-	int len = recv(cSock, szRecv, sizeof(DataHeader), 0);
-	if (len <= 0)
+	int recvlen = recv(Client->getSocket(), recvBuf, RECV_BUFF_SIZE, 0);
+	if (recvlen < 0)
 	{
-		std::cout << "<socket=" << cSock << "> client out connect ..." << std::endl;
+		std::cout << "recv error ..." << std::endl;
 		return -1;
 	}
-	// 解析数据
-	DataHeader* header = (DataHeader*)szRecv;
-	std::cout << "<socket=" << cSock << "> info length is " << header->_Length << std::endl;
-	recv(cSock, szRecv + sizeof(DataHeader), header->_Length - sizeof(DataHeader), 0);
-	ParseData(cSock, header);
+	else if (recvlen == 0)
+	{
+		std::cout << "<socket=" << Client->getSocket() << "> client out connect ..." << std::endl;
+		return -1;
+	}
+	// 接收到的信息 -> 消息缓冲区，进行数据组合和拆分
+	memcpy(Client->getMsgBuf(), recvBuf, recvlen);
+	Client->setlastPos(Client->getlastPos() + recvlen);
+	// 数据头解析  // while 循环解析多条数据，太多的情况下需要使用多线程
+	while (Client->getlastPos() >= sizeof(DataHeader))
+	{
+		DataHeader* header = (DataHeader*)Client->getMsgBuf();
+		// 数据体解析
+		if (Client->getlastPos() >= header->_Length)
+		{
+			// 从消息缓冲区解析消息并更新消息缓冲区
+			int pos = Client->getlastPos() - header->_Length;
+			ParseData(Client->getSocket(), header);
+			memcpy(Client->getMsgBuf(), Client->getMsgBuf() + header->_Length, pos);
+			Client->setlastPos(pos);
+		}
+		else {
+			break;
+		}
+	}
 	return 0;
 }
 
+// 解析消息
 void TcpServer::ParseData(SOCKET cSock, DataHeader* header)
 {
 	switch (header->_Cmd)
@@ -172,25 +235,38 @@ void TcpServer::ParseData(SOCKET cSock, DataHeader* header)
 	}
 }
 
+// 关闭连接
 void TcpServer::Close()
 {
 	if (_sSock != INVALID_SOCKET)
 	{
 #ifdef _WIN32
+		for (auto& client : _sClients)
+		{
+			closesocket(client->getSocket());
+			delete client;
+		}
 		closesocket(_sSock);
 		WSACleanup();
 #else
+		for (auto& client : _sClients)
+		{
+			close(client->getSocket());
+			delete client;
+		}
 		close(_sSock);
 #endif
 		_sSock = INVALID_SOCKET;
 	}
 }
 
-bool TcpServer::isRun()
+// 判断客户端是否运行
+bool TcpServer::isRun() const
 {
 	return _sSock != INVALID_SOCKET;
 }
 
+// 客户端运行主程序
 bool TcpServer::MainRun()
 {
 	if (isRun())
@@ -204,12 +280,14 @@ bool TcpServer::MainRun()
 		FD_SET(_sSock, &fdExp);
 		timeval tval = { 1, 0 };
 
-		for (SOCKET client : _sClients)
+		SOCKET maxSock = _sSock;
+		for (auto& client : _sClients)
 		{
-			FD_SET(client, &fdRead);
+			FD_SET(client->getSocket(), &fdRead);
+			maxSock = max(maxSock, client->getSocket());
 		}
 
-		if (0 > select(_sSock + 1, &fdRead, &fdWrite, &fdExp, &tval))
+		if (0 > select(maxSock + 1, &fdRead, &fdWrite, &fdExp, &tval))
 		{
 			std::cout << "ERROR: select error ..." << std::endl;
 			return false;
@@ -223,18 +301,21 @@ bool TcpServer::MainRun()
 				return false;
 			}
 		}
-		for (int i = 0; i < fdRead.fd_count; ++i) {
-			auto client = fdRead.fd_array[i];
-			if (-1 == RecvData(client))
-			{
-				auto it = find(_sClients.begin(), _sClients.end(), client);
-				if (it != _sClients.end())
+		for (int i = 0; i < _sClients.size(); ++i) {
+			if (FD_ISSET(_sClients[i]->getSocket(), &fdRead)) {
+				if (-1 == RecvData(_sClients[i]))
 				{
-					_sClients.erase(it);
+					auto it = _sClients.begin() + i;
+					if (it != _sClients.end())
+					{
+						_sClients.erase(it);
+					}
 				}
 			}
+			
 		}
 		return true;
 	}
 	return false;
 }
+

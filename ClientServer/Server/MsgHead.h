@@ -1,4 +1,5 @@
 #pragma once
+
 #define _WIN32_LEAN_AND_MEAN
 
 #ifdef _WIN32
@@ -16,6 +17,8 @@
 #define SOCKET_ERROR (-1)
 #endif
 
+#define RECV_BUFF_SIZE 10240
+
 enum CMD {
 	CMD_LOGIN,
 	CMD_LOGIN_RESULT,
@@ -25,6 +28,10 @@ enum CMD {
 	CMD_ERROR
 };
 struct DataHeader {
+	DataHeader() {
+		_Cmd = CMD_ERROR;
+		_Length = sizeof(DataHeader);
+	}
 	short _Cmd;
 	short _Length;
 };
@@ -33,8 +40,9 @@ struct Login : public DataHeader {
 		_Cmd = CMD_LOGIN;
 		_Length = sizeof(Login);
 	}
-	char _Username[32];
-	char _Password[32];
+	char _Username[32] = {};
+	char _Password[32] = {};
+	char _data[932] = {};
 };
 struct LoginResult : public DataHeader {
 	LoginResult() {
@@ -43,13 +51,15 @@ struct LoginResult : public DataHeader {
 		_Result = 0;
 	}
 	int _Result;
+	char _data[992] = {};
 };
 struct Logout : public DataHeader {
 	Logout() {
 		_Cmd = CMD_LOGOUT;
 		_Length = sizeof(Logout);
 	}
-	char _Username[32];
+	char _Username[32] = {};
+	char _data[964] = {};
 };
 struct LogoutResult : public DataHeader {
 	LogoutResult() {
@@ -58,11 +68,13 @@ struct LogoutResult : public DataHeader {
 		_Result = 0;
 	}
 	int _Result;
+	char _data[992] = {};
 };
 struct NewUser : public DataHeader {
-	NewUser(SOCKET sock):_Sock(sock) {
+	NewUser(SOCKET sock) :_Sock(sock) {
 		_Cmd = CMD_NEW_USER;
 		_Length = sizeof(NewUser);
 	}
 	SOCKET _Sock;
+	char _data[992] = {};
 };

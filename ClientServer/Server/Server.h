@@ -3,16 +3,36 @@
 // c++标准库
 #include<iostream>
 #include<cstring>
+#include<thread>
 #include<vector>
 
 // 消息体头文件
 #include "MsgHead.h"
 
+class ClientSock {
+public:
+	ClientSock(SOCKET sock);
+	~ClientSock() {}
+public:
+	// 获取客户端socket接口
+	SOCKET getSocket() const;
+	// 获取客户端消息缓冲区接口
+	char* getMsgBuf();
+	// 获取消息缓冲区长度和更新缓冲区长度
+	int getlastPos() const;
+	void setlastPos(int pos);
+private:
+	const SOCKET _cSock;
+	// 客户端消息缓冲区：用于分别处理每一个客户端的消息
+	char _MsgBuf[RECV_BUFF_SIZE * 10];
+	int _lastPos;
+};
+
 class TcpServer {
 public:
 	TcpServer();
 	~TcpServer();
-
+public:
 	// 创建socket
 	int InitSocket();
 	// 绑定端口
@@ -26,16 +46,17 @@ public:
 	// 群发消息
 	void SendToAll(DataHeader* header);
 	// 接收消息
-	int RecvData(SOCKET cSock);
+	int RecvData(ClientSock* Client);
 	// 解析消息
 	void ParseData(SOCKET cSock, DataHeader* header);
 	// 关闭连接
 	void Close();
 	// 判断客户端是否运行
-	bool isRun();
+	bool isRun() const;
 	// 客户端运行主程序
 	bool MainRun();
 private:
 	SOCKET _sSock;
-	std::vector<SOCKET> _sClients;
+	// 必须使用客户端指针数组，栈空间不够分配这么多消息缓冲区，需要在堆区开辟空间
+	std::vector<ClientSock*> _sClients;
 };
