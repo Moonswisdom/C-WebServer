@@ -39,7 +39,7 @@ int TcpClient::InitSocket()
 		std::cout << "ERROR: create new socket failed ..." << std::endl;
 		return -1;
 	}
-	std::cout << "create new socket succeed ..." << std::endl;
+	//std::cout << "create new socket succeed ..." << std::endl;
 	return 0;
 }
 
@@ -59,7 +59,7 @@ int TcpClient::Connect(const char* ip, unsigned short port)
 		std::cout << "ERROR: connect server failed ..." << std::endl;
 		return -1;
 	}
-	std::cout << "connect server succeed ..." << std::endl;
+	std::cout << "socket<" << _cSock << "> connect server succeed ..." << std::endl;
 	return 0;
 }
 
@@ -118,7 +118,7 @@ void TcpClient::ParseData(DataHeader* header)
 		case CMD_LOGIN_RESULT:
 		{
 			LoginResult* loginRet = (LoginResult*)header;
-			std::cout << "Recv: cmd is LOGIN_RESULT, length is " << loginRet->_Length << std::endl;
+			//std::cout << "Recv: cmd is LOGIN_RESULT, length is " << loginRet->_Length << std::endl;
 			break;
 		}
 		case CMD_LOGOUT_RESULT:
@@ -176,7 +176,6 @@ bool TcpClient::MainRun()
 				_cSock = INVALID_SOCKET;
 				return false;
 			}
-			
 		}
 		return true;
 	}

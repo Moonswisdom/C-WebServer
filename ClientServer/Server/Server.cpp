@@ -30,6 +30,7 @@ TcpServer::TcpServer()
 {
 	_sSock = INVALID_SOCKET;
 	_sClients.clear();
+	_recvCount = 0;
 }
 
 TcpServer::~TcpServer()
@@ -144,8 +145,8 @@ int TcpServer::Accept()
 	char ip[32];
 	inet_ntop(AF_INET, &caddr.sin_addr, ip, sizeof(ip));
 	std::cout << "New client <socket=" << cSock << "> connect, ip: " << ip << std::endl;
-	NewUser newuser(cSock);
-	SendToAll(&newuser);
+	//NewUser newuser(cSock);
+	//SendToAll(&newuser);
 	_sClients.emplace_back(new ClientSock(cSock));
 	return 0;
 }
@@ -214,12 +215,22 @@ int TcpServer::RecvData(ClientSock* Client)
 // 解析消息
 void TcpServer::ParseData(SOCKET cSock, DataHeader* header)
 {
+	auto tim = _ETimer.getElapseSecond();
+	++_recvCount;
+	// 计算每秒处理的消息数
+	if (tim >= 1.0)
+	{
+		std::cout << "time<" << std::setiosflags(std::ios::fixed) << std::setprecision(6) << tim << ">, clientnum<" << _sClients.size() << ">, recvCount<" << _recvCount << ">" << std::endl;
+		_ETimer.updateTime();
+		_recvCount = 0;
+	}
+
 	switch (header->_Cmd)
 	{
 		case CMD_LOGIN:
 		{
 			Login* login = (Login*)header;
-			std::cout << "<socket=" << cSock << "> Command is LOGIN, username is " << login->_Username << ", password is " << login->_Password << std::endl;
+			//std::cout << "<socket=" << cSock << "> Command is LOGIN, username is " << login->_Username << ", password is " << login->_Password << std::endl;
 			LoginResult loginRet = {};
 			SendData(cSock, &loginRet);
 			break;
@@ -227,7 +238,7 @@ void TcpServer::ParseData(SOCKET cSock, DataHeader* header)
 		case CMD_LOGOUT:
 		{
 			Logout* logout = (Logout*)header;
-			std::cout << "<socket=" << cSock << "> Command is LOGOUT, username is " << logout->_Username << std::endl;
+			//std::cout << "<socket=" << cSock << "> Command is LOGOUT, username is " << logout->_Username << std::endl;
 			LogoutResult logoutRet = {};
 			SendData(cSock, &logoutRet);
 			break;
@@ -318,4 +329,3 @@ bool TcpServer::MainRun()
 	}
 	return false;
 }
-

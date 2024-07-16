@@ -1,13 +1,16 @@
 #pragma once
 
 // c++标准库
-#include<iostream>
+#include<iostream> 
 #include<cstring>
 #include<thread>
 #include<vector>
+#include<iomanip>
 
 // 消息体头文件
 #include "MsgHead.h"
+// 高精度计时器
+#include "EfficientTimer.h"
 
 class ClientSock {
 public:
@@ -59,4 +62,8 @@ private:
 	SOCKET _sSock;
 	// 必须使用客户端指针数组，栈空间不够分配这么多消息缓冲区，需要在堆区开辟空间
 	std::vector<ClientSock*> _sClients;
+	// 计时器
+	EfficientTimer _ETimer;
+	// 计数器
+	int _recvCount;
 };

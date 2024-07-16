@@ -147,6 +147,7 @@
     <ClInclude Include="Server.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EfficientTimer.h" />
     <ClCompile Include="Servermain.cpp" />
     <ClCompile Include="Server.cpp" />
   </ItemGroup>

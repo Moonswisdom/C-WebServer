@@ -4,6 +4,7 @@
 #include<iostream>
 #include<cstring>
 #include<thread>
+#include<vector>
 
 // 消息体头文件
 #include "MsgHead.h"
