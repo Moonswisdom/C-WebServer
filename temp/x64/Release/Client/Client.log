@@ -1,8 +1,7 @@
 ﻿  Client.cpp
-D:\Work\ClientServer\ClientServer\Client\Client.cpp(167,25): warning C4244: “参数”: 从“SOCKET”转换到“int”，可能丢失数据
-  Clientmain.cpp
+  Cmain.cpp
   正在生成代码
   Previous IPDB not found, fall back to full compilation.
-  All 152 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 256 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   已完成代码的生成
   Client.vcxproj -> D:\Work\ClientServer\bin\x64\Release\Client.exe

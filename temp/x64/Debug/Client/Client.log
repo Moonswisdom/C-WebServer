@@ -1,5 +1,4 @@
 ﻿  Client.cpp
-D:\Work\ClientServer\ClientServer\Client\Client.cpp(167,25): warning C4244: “参数”: 从“SOCKET”转换到“int”，可能丢失数据
-  Clientmain.cpp
+  Cmain.cpp
   正在生成代码...
   Client.vcxproj -> D:\Work\ClientServer\bin\x64\Debug\Client.exe

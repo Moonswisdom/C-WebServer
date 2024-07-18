@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Client.h">
+    <ClInclude Include="MsgHead.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MsgHead.h">
+    <ClInclude Include="Client.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -26,7 +26,7 @@
     <ClCompile Include="Client.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Clientmain.cpp">
+    <ClCompile Include="Cmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

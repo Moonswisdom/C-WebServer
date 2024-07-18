@@ -1,9 +1,8 @@
 ﻿  EfficientTimer.h
-  Servermain.cpp
   Server.cpp
-D:\Work\ClientServer\ClientServer\Server\Server.cpp(301,26): warning C4244: “参数”: 从“SOCKET”转换到“int”，可能丢失数据
+  Smain.cpp
   正在生成代码
   Previous IPDB not found, fall back to full compilation.
-  All 199 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 310 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   已完成代码的生成
   Server.vcxproj -> D:\Work\ClientServer\bin\x64\Release\Server.exe

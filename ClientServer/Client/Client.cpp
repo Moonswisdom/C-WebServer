@@ -3,6 +3,8 @@
 TcpClient::TcpClient()
 {
 	_cSock = INVALID_SOCKET;
+	_isConnect = false;
+	memset(_recvBuf, 0, RECV_BUFF_SIZE);
 	memset(_MsgBuf, 0, RECV_BUFF_SIZE * 10);
 	_lastPos = 0;
 }
@@ -12,125 +14,118 @@ TcpClient::~TcpClient()
 	Close();
 }
 
-int TcpClient::InitSocket()
+int TcpClient::InitSock()
 {
-	// windows平台打开socket环境
+	// 开启windows平台socket环境
 #ifdef _WIN32
-	// 使用socket 2.x版本
 	WORD wr = MAKEWORD(2, 2);
-	WSADATA dat;
-	int err = WSAStartup(wr, &dat);
-	if (err != 0)
-	{
-		std::cout << "window start up socket environment failed, error num is " << err << std::endl;
+	WSADATA dat = {};
+	int wret = WSAStartup(wr, &dat);
+	if (wret != 0) {
+		std::cout << "ERROR: WSAStartup error ..." << std::endl;
 		return -1;
 	}
 #endif
 	// 判断是否有旧连接
 	if (_cSock != INVALID_SOCKET)
 	{
-		Close();
-		std::cout << "off old connect ..." << std::endl;
+#ifdef _WIN32
+		closesocket(_cSock);
+#else
+		close(_cSock);
+#endif
+		_cSock = INVALID_SOCKET;
 	}
-	// 创建Socket
+
+	// 创建新socket
 	_cSock = socket(AF_INET, SOCK_STREAM, 0);
 	if (_cSock == INVALID_SOCKET)
 	{
-		std::cout << "ERROR: create new socket failed ..." << std::endl;
+		std::cout << "ERROR: create new socket error ..." << std::endl;
 		return -1;
 	}
-	//std::cout << "create new socket succeed ..." << std::endl;
+	//std::cout << "create new <socket=" << _cSock << "> succeed ..." << std::endl;
+
 	return 0;
 }
 
-int TcpClient::Connect(const char* ip, unsigned short port)
+int TcpClient::Connect(const char* ip, unsigned int port)
 {
+	// 判断socket是否创建成功
 	if (_cSock == INVALID_SOCKET)
 	{
-		InitSocket();
+		InitSock();
 	}
-	// 连接服务器
+	// 创建地址端口变量
 	sockaddr_in caddr = {};
 	caddr.sin_family = AF_INET;
 	caddr.sin_port = htons(port);
 	inet_pton(AF_INET, ip, &caddr.sin_addr);
-	if (SOCKET_ERROR == connect(_cSock, (struct sockaddr*)&caddr, sizeof(caddr)))
-	{
-		std::cout << "ERROR: connect server failed ..." << std::endl;
+	// 请求连接
+	if (SOCKET_ERROR == connect(_cSock, (struct sockaddr*)&caddr, sizeof(caddr))) {
+		std::cout << "ERROR: <socket=" << _cSock << "> connect server error ..." << std::endl;
 		return -1;
 	}
-	std::cout << "socket<" << _cSock << "> connect server succeed ..." << std::endl;
+	//std::cout << "<socket=" << _cSock << "> connect server succeed ..." << std::endl;
+	_isConnect = true;
 	return 0;
 }
 
-int TcpClient::SendData(DataHeader* header)
+void TcpClient::SendData(DataHeader* header)
 {
-	if (isRun() && header)
+	if (isRun() && header) 
 	{
 		send(_cSock, (char*)header, header->_Length, 0);
-		return 0;
 	}
-	return -1;
 }
 
-// 处理粘包、少包问题，通过 接收缓冲区 -> 消息缓冲区 二级缓冲区来组合拆分数据
-// 接收缓冲区：接收数据
-char recvBuf[RECV_BUFF_SIZE] = {};
 int TcpClient::RecvData()
 {
 	// 接收数据
-	int recvlen = recv(_cSock, recvBuf, RECV_BUFF_SIZE, 0);
-	if (recvlen <= 0)
+	int recvlen = recv(_cSock, _recvBuf, RECV_BUFF_SIZE, 0);
+	if (recvlen <= 0) 
 	{
-		std::cout << "server off connect ..." << std::endl << std::endl;
+		std::cout << "server off connect ..." << std::endl;
 		return -1;
 	}
-	// 将接收的数据拼接到消息缓冲区
-	memcpy(_MsgBuf + _lastPos, recvBuf, recvlen);
+	// 组合拆分数据
+	memcpy(_MsgBuf + _lastPos, _recvBuf, recvlen);
 	_lastPos += recvlen;
-	// 判断消息长度是否满足完整的数据头， while循环解析数据，数据量大时较慢，后续改为多线程
-	while (_lastPos >= sizeof(DataHeader)) {
-		// 消息转化获取数据体长度
+	// 判断消息缓冲区长度是否够一条消息
+	while (_lastPos >= sizeof(DataHeader)) 
+	{
 		DataHeader* header = (DataHeader*)_MsgBuf;
-		// 判断消息长度是否满足完整的数据体
-		if (_lastPos >= header->_Length) {
-			// 记录剩余长度
+		if (_lastPos >= header->_Length)
+		{
+			// 对数据拆分并解析
 			int pos = _lastPos - header->_Length;
-			// 解析数据
 			ParseData(header);
-			// 将消息缓冲区中内容前移，覆盖已处理数据
-			memcpy(_MsgBuf, _MsgBuf + header->_Length, pos); 
-			// 修改
+			memcpy(_MsgBuf, _MsgBuf + header->_Length, pos);
 			_lastPos = pos;
 		}
-		else {
+		else 
+		{
 			break;
 		}
 	}
+
 	return 0;
 }
 
 void TcpClient::ParseData(DataHeader* header)
 {
-	// 解析数据
 	switch (header->_Cmd)
 	{
 		case CMD_LOGIN_RESULT:
 		{
 			LoginResult* loginRet = (LoginResult*)header;
-			//std::cout << "Recv: cmd is LOGIN_RESULT, length is " << loginRet->_Length << std::endl;
+			//std::cout << "Recv command = LOGIN_RESULT, result = " << loginRet->_Result << std::endl;
 			break;
 		}
 		case CMD_LOGOUT_RESULT:
 		{
 			LogoutResult* logoutRet = (LogoutResult*)header;
-			std::cout << "Recv: cmd is LOGOUT_RESULT, length is " << logoutRet->_Length << std::endl;
-			break;
-		}
-		case CMD_NEW_USER:
-		{
-			NewUser* newuser = (NewUser*)header;
-			std::cout << "Recv: New user join, socket is " << newuser->_Sock << std::endl;
+			std::cout << "Recv command = LOGIN_RESULT, result = " << logoutRet->_Result << std::endl;
 			break;
 		}
 	}
@@ -146,39 +141,40 @@ void TcpClient::Close()
 #else
 		close(_cSock);
 #endif
+		_cSock = INVALID_SOCKET;
 	}
-	_cSock = INVALID_SOCKET;
+	_isConnect = false;
 }
 
 bool TcpClient::isRun() const
 {
-	return _cSock != INVALID_SOCKET;
+	return _cSock != INVALID_SOCKET && _isConnect;
 }
 
-bool TcpClient::MainRun()
+void TcpClient::mainRun()
 {
 	if (isRun())
 	{
-		// 创建select模型
 		fd_set fdRead;
 		FD_ZERO(&fdRead);
 		FD_SET(_cSock, &fdRead);
 		timeval tval = { 1, 0 };
-		if (0 > select(_cSock + 1, &fdRead, 0, 0, &tval)) {
+
+		int ret = select((int)_cSock + 1, &fdRead, NULL, NULL, &tval);
+		if (ret < 0)
+		{
 			std::cout << "ERROR: select error ..." << std::endl;
-			return false;
+			return;
 		}
+
 		if (FD_ISSET(_cSock, &fdRead))
 		{
 			FD_CLR(_cSock, &fdRead);
 			if (RecvData() == -1)
 			{
-				_cSock = INVALID_SOCKET;
-				return false;
+				Close();
+				return;
 			}
 		}
-		return true;
 	}
-	return false;
 }
-

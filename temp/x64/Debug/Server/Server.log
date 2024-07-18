@@ -1,6 +1,5 @@
 ﻿  EfficientTimer.h
-  Servermain.cpp
   Server.cpp
-D:\Work\ClientServer\ClientServer\Server\Server.cpp(301,26): warning C4244: “参数”: 从“SOCKET”转换到“int”，可能丢失数据
+  Smain.cpp
   正在生成代码...
   Server.vcxproj -> D:\Work\ClientServer\bin\x64\Debug\Server.exe
